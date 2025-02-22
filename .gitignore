@@ -1,0 +1,7 @@
+*.swp
+*.kate-swp
+.settings/
+/Debug/
+*.launch
+tags
+Core/Inc/TESTING_KEYS.h

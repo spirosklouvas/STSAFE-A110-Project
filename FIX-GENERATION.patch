@@ -1,0 +1,76 @@
+diff --git a/Drivers/BSP/SAFE_Axx0/stsafea_service.c b/Drivers/BSP/SAFE_Axx0/stsafea_service.c
+index a8ba433..4df431d 100644
+--- a/Drivers/BSP/SAFE_Axx0/stsafea_service.c
++++ b/Drivers/BSP/SAFE_Axx0/stsafea_service.c
+@@ -521,7 +521,7 @@ int32_t SAFEA1_I2C_Send(uint16_t DevAddr, uint8_t *pData, uint16_t Length)
+ {
+   int32_t ret;
+ 
+-  ret = BSP_I2C1_Send(DevAddr, pData, Length);
++  ret = BSP_I2C2_Send(DevAddr, pData, Length);
+   if (ret == BSP_ERROR_BUS_ACKNOWLEDGE_FAILURE)
+   {
+     return STSAFEA_BUS_NACK;
+@@ -548,7 +548,7 @@ int32_t SAFEA1_I2C_Recv(uint16_t DevAddr, uint8_t *pData, uint16_t Length)
+ {
+   int32_t ret;
+ 
+-  ret = BSP_I2C1_Recv(DevAddr, pData, Length);
++  ret = BSP_I2C2_Recv(DevAddr, pData, Length);
+   if (ret == BSP_ERROR_BUS_ACKNOWLEDGE_FAILURE)
+   {
+     return STSAFEA_BUS_NACK;
+diff --git a/X-CUBE-SAFEA1/Target/safea1_conf.h b/X-CUBE-SAFEA1/Target/safea1_conf.h
+index 6c198e7..379afbe 100644
+--- a/X-CUBE-SAFEA1/Target/safea1_conf.h
++++ b/X-CUBE-SAFEA1/Target/safea1_conf.h
+@@ -54,6 +54,8 @@ extern "C" {
+   Change this value as per the maximum size of certificate*/
+ #define MAX_CERTIFICATE_SIZE                      500U
+ 
++#define STSAFEA_USE_OPTIMIZATION_NO_HOST_MAC_ENCRYPT 1
++
+ /******************************************************************************/
+ 
+ /* Defines ---------------------------------------------------------------*/
+diff --git a/wolfSSL/wolfSSL.I-CUBE-wolfSSL_conf.h b/wolfSSL/wolfSSL.I-CUBE-wolfSSL_conf.h
+index d6fe552..495b466 100644
+--- a/wolfSSL/wolfSSL.I-CUBE-wolfSSL_conf.h
++++ b/wolfSSL/wolfSSL.I-CUBE-wolfSSL_conf.h
+@@ -177,6 +177,9 @@
+ #elif defined(STM32L475xx)
+     #define WOLFSSL_STM32L4
+     #define HAL_CONSOLE_UART huart1
++#elif defined(STM32L4S5xx)
++    #define WOLFSSL_STM32L4
++    #define HAL_CONSOLE_UART huart1
+ #elif defined(STM32L562xx)
+     #define WOLFSSL_STM32L5
+     #define WOLFSSL_STM32_PKA
+diff --git a/wolfSSL/wolfSSL.I-CUBE-wolfSSL_conf.h b/wolfSSL/wolfSSL.I-CUBE-wolfSSL_conf.h
+index c499d07..4e3fa80 100644
+--- a/wolfSSL/wolfSSL.I-CUBE-wolfSSL_conf.h
++++ b/wolfSSL/wolfSSL.I-CUBE-wolfSSL_conf.h
+@@ -678,7 +678,6 @@
+ #define NO_MAIN_DRIVER
+ #define NO_DEV_RANDOM
+ #define NO_OLD_TLS
+-#define WOLFSSL_NO_CLIENT_AUTH /* disable client auth for Ed25519/Ed448 */
+ 
+ #define NO_DSA
+ #define NO_RC4
+diff --git b/wolfSSL/wolfSSL.I-CUBE-wolfSSL_conf.h a/wolfSSL/wolfSSL.I-CUBE-wolfSSL_conf.h
+index 30972af..cc9cb5a 100644
+--- b/wolfSSL/wolfSSL.I-CUBE-wolfSSL_conf.h
++++ a/wolfSSL/wolfSSL.I-CUBE-wolfSSL_conf.h
+@@ -699,6 +699,10 @@
+     #define NO_ASN_TIME
+ #endif
+ 
++#define HAVE_PK_CALLBACKS
++#define WOLFSSL_DER_TO_PEM
++#define WOLFSSL_BASE64_ENCODE
++
+ #ifdef __cplusplus
+ }
+ #endif
